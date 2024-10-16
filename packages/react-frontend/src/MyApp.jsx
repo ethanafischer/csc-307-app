@@ -13,36 +13,44 @@ function MyApp() {
 			.catch((error) => { console.log(error); });
 	  }, [] );
 
-		function postUser(person) {
-			const promise = fetch("Http://localhost:8000/users", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(person),
-			});
-	
-			return promise;
-		}
+	function postUser(person) {
+		const promise = fetch("http://localhost:8000/users", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(person),
+		});
+
+		return promise;
+	}
 
 	function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
-    });
-    setCharacters(updated);
+		fetch(`http://localhost:8000/users/${characters[index].id}`, {
+			method: 'DELETE'
+		})
+			.then((response) => {
+				if (response.ok) {
+					const updated = characters.filter((_, i) => i !== index);
+					setCharacters(updated);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
   }
 
 	function updateList(person) { 
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
+			.then((response) => response.json())
+      .then((newPerson) => setCharacters([...characters, newPerson]))
       .catch((error) => {
         console.log(error);
       })
-}
+	}
 
 	function fetchUsers() {
-		const promise = fetch("http://localhost:8000/users");
-		return promise;
+		return fetch("http://localhost:8000/users");
 	}
 
 	return (

@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { users, findUserByName, findUserById, addUser, deleteUserById } from "./helper.js";
+import { users, findUserById, addUser } from "./helper.js";
 
 const app = express();
 const port = 8000;
@@ -41,14 +41,21 @@ app.get("/users/:id", (req, res) => {
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  userToAdd.id = Math.round(Math.random() * 1000000).toString();
+  const addedUser = addUser(userToAdd);
+  res.status(201).send(addedUser);
 });
 
 app.delete('/users/:id', (req, res) => {
   const id = req.params["id"];
-  deleteUserById(id);
-  res.send();
+  const userIndex = users["users_list"].findIndex(user => user.id === id);
+
+  if (userIndex !== -1) {
+    users["users_list"].splice(userIndex, 1);
+    res.status(204).send();
+  } else {
+    res.status(404).send("Resource not found.");
+  }
 })
 
 app.listen(port, () => {

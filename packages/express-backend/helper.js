@@ -37,13 +37,9 @@ export const findUserByName = (name) => {
 export const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
-export const addUser = (user) => {
+export const addUser = (user) => {	
   users["users_list"].push(user);
   return user;
 };
 
-export const deleteUserById = (id) => {
-	users["users_list"] = users["users_list"].filter(user => user["id"] != id);
-	return id;
-}
   

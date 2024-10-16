@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 function Form(props) {
   const [person, setPerson] = useState({
+	id: "",
     name: "",
     job: ""
   });
